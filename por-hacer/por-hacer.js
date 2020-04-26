@@ -2,6 +2,11 @@ const fs = require('fs');
 
 let TareasPorHacer = [];
 
+const getListado = () => {
+    cargarDB();
+    return TareasPorHacer;
+}
+
 const crear = (p_Descripcion) => {
     cargarDB();
     let tarea = {
@@ -11,6 +16,30 @@ const crear = (p_Descripcion) => {
     TareasPorHacer.push(tarea);
     guardarDB();
     return tarea;
+};
+
+const actualizar = (p_Descripcion, p_Completado = true) => {
+    cargarDB();
+    let index = TareasPorHacer.findIndex(tarea => tarea.descripcion === p_Descripcion);
+    if (index >= 0) {
+        TareasPorHacer[index].completado = p_Completado;
+        guardarDB();
+        return true;
+    } else {
+        return false;
+    }
+};
+
+const borrar = (p_Descripcion) => {
+    cargarDB();
+    let index = TareasPorHacer.findIndex(tarea => tarea.descripcion === p_Descripcion);
+    if (index >= 0) {
+        TareasPorHacer.splice(index, 1);
+        guardarDB();
+        return true;
+    } else {
+        return false;
+    }
 };
 
 const guardarDB = () => {
@@ -29,5 +58,8 @@ const cargarDB = () => {
 };
 
 module.exports = {
-    crear
+    crear,
+    getListado,
+    actualizar,
+    borrar
 };
